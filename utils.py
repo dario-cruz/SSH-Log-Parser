@@ -30,11 +30,14 @@ def count_failed_login_ips():
         journalctl.get_previous(10000) #Can be adjusted to add more history of logs.
         journalctl.seek_head()
 
-        for entry in j:
+        for entry in journalctl:
             log = entry.get("MESSAGE", "")
             ip = extract_log_ip(log)
             if ip:
                 ip_counts[ip] += 1
+
     except Exception as e:
-        print()
-    
+        print(f"[!] Error reading journal: {e}")
+
+
+    return dict(ip_counts)
